@@ -3,7 +3,6 @@ package com.culturelog.culturelog.media;
 
 import com.culturelog.culturelog.media.model.DelMediaDto;
 import com.culturelog.culturelog.media.model.InsMediaDto;
-import com.culturelog.culturelog.media.model.PatchIsSawDto;
 import com.culturelog.culturelog.media.model.PutMedia;
 import com.culturelog.culturelog.media.model.select.*;
 import org.apache.ibatis.annotations.Mapper;
@@ -18,13 +17,11 @@ public interface MediaMapper {
 
     int postMediaPics(InsMediaDto dto);
 
-    int patchIsSaw(PatchIsSawDto dto);
-
     int putMedia(PutMedia dto);
 
-    int DelMediaPics(DelMediaDto dto);
+    int delMediaPics(DelMediaDto dto);
 
-    int DelMedia(DelMediaDto dto);
+    int delMedia(DelMediaDto dto);
 
     Integer selMediaByUser(DelMediaDto dto);
 

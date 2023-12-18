@@ -3,7 +3,6 @@ package com.culturelog.culturelog.media;
 import com.culturelog.culturelog.common.ResVo;
 import com.culturelog.culturelog.media.model.DelMediaDto;
 import com.culturelog.culturelog.media.model.InsMediaDto;
-import com.culturelog.culturelog.media.model.PatchIsSawDto;
 import com.culturelog.culturelog.media.model.PutMedia;
 import com.culturelog.culturelog.media.model.select.*;
 import io.swagger.v3.oas.annotations.Operation;
@@ -29,38 +28,37 @@ public class MediaContoller {
         return service.getMediaAll(dto);
     }
 
-    @Operation(summary = "날짜별",description = "메인페이지")
+    @Operation(summary = "날짜별 리스트",description = "날짜별 리스트")
     @GetMapping("/day")
     public List<SelMediaDayVo> getDayMedia(@RequestBody SelMediaDayDto dto){
         return service.getDayMedia(dto);
     }
 
+    @Operation(summary = "상세페이지",description = "상세페이지")
     @GetMapping("/{imedia}")
     public SelDetailMediaVo getDetailMedia(@PathVariable int imedia, int iuser){
         return service.getDetailMedia(imedia,iuser);
     }
 
+    @Operation(summary = "시청여부에 따른 페이지",description = "시청여부에 따른 페이지")
     @GetMapping
     public List<SelMediaVo> getMedia(int iuser, int isSaw){
         return service.getMedia(iuser,isSaw);
     }
 
-
+    @Operation(summary = "미디어 등록",description = "미디어 등록")
     @PostMapping
     public ResVo postMedia(@RequestBody InsMediaDto dto){
         return service.postMedia(dto);
     }
 
-    @PatchMapping
-    public ResVo patchIsSaw(@RequestBody PatchIsSawDto dto){
-        return service.patchIsSaw(dto);
-    }
-
+    @Operation(summary = "미디어 수정",description = "미디어 수정")
     @PutMapping
     public ResVo putMedia(@RequestBody PutMedia dto){
         return service.putMedia(dto);
     }
 
+    @Operation(summary = "미디어 삭제",description = "미디어 삭제")
     @DeleteMapping
     public ResVo delMedia(@RequestBody DelMediaDto dto){
         return service.delMedia(dto);
