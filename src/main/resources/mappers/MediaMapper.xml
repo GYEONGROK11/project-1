@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.culturelog.culturelog.media.MediaMapper">
+
+    <insert id="postMedia" useGeneratedKeys="true" keyProperty="imedia">
+        INSERT INTO t_media
+        SET iuser = #{iuser}
+        , genrepk = #{genrepk}
+        , title = #{title}
+        , date = #{date}
+        <if test="comment !=null and comment != ''">
+            , comment = #{comment}
+        </if>
+        <if test="star > 0">
+            , star = #{star}
+        </if>
+        , is_saw = #{isSaw}
+    </insert>
+
+    <insert id="postMediaPics">
+        INSERT INTO t_media_pics
+        (imedia, pic)
+        VALUES
+        <foreach collection="pics" item="pic" open="(" separator="),(" close=")">
+            #{imedia},#{pic}
+        </foreach>
+    </insert>
+
+    <update id="patchIsSaw">
+        UPDATE t_media
+        SET is_saw = #{isSaw}
+        WHERE imedia = #{imedia}
+        AND iuser = #{iuser}
+    </update>
+
+    <update id="putMedia">
+        UPDATE t_media
+        SET
+        <if test="genrepk > 0">
+            genrepk = #{genrepk}
+        </if>
+        <if test="title !=null and title !=''">
+            ,title = #{title}
+        </if>
+        <if test="date !=null and date !=''">
+            ,date = #{date}
+        </if>
+        <if test="comment !=null and comment !=''">
+            ,comment = #{comment}
+        </if>
+        <if test="star > 0">
+            ,star = #{star}
+        </if>
+        <if test="isSaw == 0 or isSaw == 1">
+            ,is_saw = #{isSaw}
+        </if>
+        WHERE imedia = #{imedia}
+        AND iuser = #{iuser}
+        AND del = 0
+    </update>
+
+    <delete id="DelMediaPics">
+        DELETE
+        FROM t_media_pics
+        WHERE imedia = #{imedia}
+    </delete>
+    <update id="DelMedia">
+        UPDATE t_media
+        SET del = 1
+        WHERE imedia = #{imedia}
+    </update>
+
+    <select id="selMediaByUser">
+        SELECT imedia
+        FROM t_media
+        WHERE imedia = #{imedia}
+        AND iuser = #{iuser}
+        AND del = 0
+    </select>
+
+    <select id="getMediaAll">
+        SELECT DAY(A.date) as day, B.pic
+        FROM t_media A
+        JOIN t_media_pics B
+        ON A.imedia = B.imedia
+        WHERE A.iuser = #{iuser}
+        AND YEAR(A.date) = #{year}
+        AND MONTH(A.date) = #{month}
+        AND del = 0
+        GROUP BY A.date
+    </select>
+    <select id="getMediaImedia">
+        SELECT imedia
+        FROM t_media
+        WHERE iuser = #{iuser}
+        AND day(DATE) = #{day}
+        AND del = 0
+    </select>
+
+    <select id="getDayMedia">
+        SELECT A.imedia, A.title, A.date, A.star, B.pic
+        FROM t_media A
+        JOIN t_media_pics B
+        ON A.imedia = B.imedia
+        WHERE A.iuser = #{iuser}
+        AND A.date = #{date}
+        AND del = 0
+        GROUP BY A.imedia
+    </select>
+
+    <select id="getDetailMedia">
+        SELECT imedia, genrepk, title, comment, star, date, is_saw AS isSaw
+        FROM t_media
+        WHERE iuser = #{iuser}
+        AND imedia = #{imedia}
+        AND del = 0
+    </select>
+
+    <select id="getDetailMediaPics">
+        SELECT pic
+        FROM t_media_pics
+        WHERE imedia = #{imedia}
+    </select>
+
+    <select id="getMedia">
+        SELECT A.imedia, A.title, A.date
+        , B.pic, A.star
+        FROM t_media A
+        JOIN t_media_pics B
+        ON A.imedia = B.imedia
+        WHERE iuser = #{iuser}
+        AND is_saw = #{isSaw}
+        AND del = 0
+        GROUP BY A.imedia
+    </select>
+</mapper>
